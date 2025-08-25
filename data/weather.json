@@ -1,0 +1,268 @@
+{
+  "_metadata": {
+    "lastUpdate": "2024-01-01T12:00:00.000Z",
+    "totalCities": 32,
+    "successfulUpdates": 32,
+    "failedUpdates": 0,
+    "availableCities": [
+      "Warsaw", "Krakow", "Gdansk", "Wroclaw", "Poznan",
+      "London", "Paris", "Berlin", "Rome", "Madrid",
+      "Amsterdam", "Vienna", "Prague", "Budapest", "Stockholm",
+      "New York", "Los Angeles", "Chicago", "Miami", "San Francisco",
+      "Tokyo", "Seoul", "Beijing", "Shanghai", "Hong Kong",
+      "Sydney", "Melbourne", "Toronto", "Vancouver", "Montreal",
+      "Dubai", "Singapore"
+    ],
+    "failedCities": [],
+    "version": "1.0.0",
+    "source": "OpenWeatherMap API"
+  },
+  "Warsaw": {
+    "current": {
+      "temperature": 15,
+      "feels_like": 13,
+      "humidity": 65,
+      "pressure": 1013,
+      "visibility": 10000,
+      "uv_index": 3,
+      "wind_speed": 12,
+      "wind_direction": 180,
+      "weather_main": "Clouds",
+      "weather_description": "scattered clouds",
+      "weather_icon": "03d",
+      "sunrise": "2024-01-01T06:30:00Z",
+      "sunset": "2024-01-01T16:45:00Z",
+      "timezone": 3600
+    },
+    "forecast": [
+      {
+        "date": "2024-01-01",
+        "temperature_min": 8,
+        "temperature_max": 15,
+        "weather_main": "Clouds",
+        "weather_description": "scattered clouds",
+        "weather_icon": "03d",
+        "humidity": 65,
+        "wind_speed": 12,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-02",
+        "temperature_min": 10,
+        "temperature_max": 18,
+        "weather_main": "Clear",
+        "weather_description": "clear sky",
+        "weather_icon": "01d",
+        "humidity": 55,
+        "wind_speed": 8,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-03",
+        "temperature_min": 12,
+        "temperature_max": 20,
+        "weather_description": "partly cloudy",
+        "weather_icon": "02d",
+        "humidity": 60,
+        "wind_speed": 10,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-04",
+        "temperature_min": 9,
+        "temperature_max": 16,
+        "weather_main": "Rain",
+        "weather_description": "light rain",
+        "weather_icon": "10d",
+        "humidity": 80,
+        "wind_speed": 15,
+        "precipitation": 2.5
+      },
+      {
+        "date": "2024-01-05",
+        "temperature_min": 7,
+        "temperature_max": 14,
+        "weather_main": "Snow",
+        "weather_description": "light snow",
+        "weather_icon": "13d",
+        "humidity": 85,
+        "wind_speed": 18,
+        "precipitation": 1.2
+      }
+    ],
+    "location": {
+      "name": "Warsaw",
+      "country": "PL",
+      "latitude": 52.2297,
+      "longitude": 21.0122,
+      "timezone": "Europe/Warsaw"
+    },
+    "lastUpdate": "2024-01-01T12:00:00.000Z"
+  },
+  "Paris": {
+    "current": {
+      "temperature": 18,
+      "feels_like": 16,
+      "humidity": 70,
+      "pressure": 1015,
+      "visibility": 10000,
+      "uv_index": 4,
+      "wind_speed": 10,
+      "wind_direction": 220,
+      "weather_main": "Clear",
+      "weather_description": "clear sky",
+      "weather_icon": "01d",
+      "sunrise": "2024-01-01T07:15:00Z",
+      "sunset": "2024-01-01T16:30:00Z",
+      "timezone": 3600
+    },
+    "forecast": [
+      {
+        "date": "2024-01-01",
+        "temperature_min": 12,
+        "temperature_max": 18,
+        "weather_main": "Clear",
+        "weather_description": "clear sky",
+        "weather_icon": "01d",
+        "humidity": 70,
+        "wind_speed": 10,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-02",
+        "temperature_min": 14,
+        "temperature_max": 21,
+        "weather_main": "Clouds",
+        "weather_description": "few clouds",
+        "weather_icon": "02d",
+        "humidity": 65,
+        "wind_speed": 8,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-03",
+        "temperature_min": 16,
+        "temperature_max": 23,
+        "weather_main": "Clear",
+        "weather_description": "clear sky",
+        "weather_icon": "01d",
+        "humidity": 60,
+        "wind_speed": 12,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-04",
+        "temperature_min": 13,
+        "temperature_max": 19,
+        "weather_main": "Rain",
+        "weather_description": "moderate rain",
+        "weather_icon": "10d",
+        "humidity": 85,
+        "wind_speed": 16,
+        "precipitation": 5.2
+      },
+      {
+        "date": "2024-01-05",
+        "temperature_min": 11,
+        "temperature_max": 17,
+        "weather_main": "Clouds",
+        "weather_description": "overcast clouds",
+        "weather_icon": "04d",
+        "humidity": 75,
+        "wind_speed": 14,
+        "precipitation": 0
+      }
+    ],
+    "location": {
+      "name": "Paris",
+      "country": "FR",
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "timezone": "Europe/Paris"
+    },
+    "lastUpdate": "2024-01-01T12:00:00.000Z"
+  },
+  "London": {
+    "current": {
+      "temperature": 12,
+      "feels_like": 10,
+      "humidity": 80,
+      "pressure": 1008,
+      "visibility": 8000,
+      "uv_index": 2,
+      "wind_speed": 15,
+      "wind_direction": 270,
+      "weather_main": "Rain",
+      "weather_description": "light rain",
+      "weather_icon": "10d",
+      "sunrise": "2024-01-01T07:45:00Z",
+      "sunset": "2024-01-01T16:00:00Z",
+      "timezone": 0
+    },
+    "forecast": [
+      {
+        "date": "2024-01-01",
+        "temperature_min": 8,
+        "temperature_max": 12,
+        "weather_main": "Rain",
+        "weather_description": "light rain",
+        "weather_icon": "10d",
+        "humidity": 80,
+        "wind_speed": 15,
+        "precipitation": 3.2
+      },
+      {
+        "date": "2024-01-02",
+        "temperature_min": 9,
+        "temperature_max": 14,
+        "weather_main": "Clouds",
+        "weather_description": "broken clouds",
+        "weather_icon": "04d",
+        "humidity": 75,
+        "wind_speed": 12,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-03",
+        "temperature_min": 11,
+        "temperature_max": 16,
+        "weather_main": "Clear",
+        "weather_description": "clear sky",
+        "weather_icon": "01d",
+        "humidity": 65,
+        "wind_speed": 10,
+        "precipitation": 0
+      },
+      {
+        "date": "2024-01-04",
+        "temperature_min": 7,
+        "temperature_max": 13,
+        "weather_main": "Rain",
+        "weather_description": "heavy rain",
+        "weather_icon": "10d",
+        "humidity": 90,
+        "wind_speed": 20,
+        "precipitation": 8.5
+      },
+      {
+        "date": "2024-01-05",
+        "temperature_min": 6,
+        "temperature_max": 11,
+        "weather_main": "Clouds",
+        "weather_description": "overcast clouds",
+        "weather_icon": "04d",
+        "humidity": 85,
+        "wind_speed": 18,
+        "precipitation": 0
+      }
+    ],
+    "location": {
+      "name": "London",
+      "country": "GB",
+      "latitude": 51.5074,
+      "longitude": -0.1278,
+      "timezone": "Europe/London"
+    },
+    "lastUpdate": "2024-01-01T12:00:00.000Z"
+  }
+}

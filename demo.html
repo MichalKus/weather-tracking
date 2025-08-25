@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Weather Widget dla Notion</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+        }
+        
+        .demo-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .demo-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .demo-item h3 {
+            margin: 0 0 15px 0;
+            color: #495057;
+            font-size: 1.3em;
+        }
+        
+        .widget-frame {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        
+        .url-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 10px 0;
+            word-break: break-all;
+            border-left: 4px solid #007bff;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .instructions h3 {
+            margin: 0 0 15px 0;
+            color: #1565c0;
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .step::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #2196f3;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .instructions ol {
+            counter-reset: step-counter;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        
+        .city-selector {
+            margin: 20px 0;
+        }
+        
+        .city-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .city-btn {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .city-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .city-btn.active {
+            background: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌤️ Weather Widget Demo</h1>
+            <p>Dynamiczny widget pogodowy dla szablonów Notion</p>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">🚀 Jak to działa</h2>
+            
+            <div class="instructions">
+                <h3>Instrukcje użytkowania:</h3>
+                <ol>
+                    <li class="step">Skopiuj plik <code>weather-widget.html</code> na swój hosting (GitHub Pages, Netlify, Vercel)</li>
+                    <li class="step">Zarejestruj się na <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap.org</a> i pobierz darmowy klucz API</li>
+                    <li class="step">Zamień <code>YOUR_API_KEY_HERE</code> w pliku na swój klucz API</li>
+                    <li class="step">Dodaj pole "Location" do bazy danych "Trip Itinerary" w Notion</li>
+                    <li class="step">Użyj bloku Embed w Notion z URL: <code>https://twoja-domena.com/weather-widget.html?city=MIASTO</code></li>
+                </ol>
+            </div>
+            
+            <div class="highlight">
+                <strong>💡 Pro tip:</strong> Użyj formuły Notion do automatycznego generowania URL na podstawie pola "Location":
+                <div class="code-block">"https://twoja-domena.com/weather-widget.html?city=" + prop("Location")</div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">🌍 Przykłady dla różnych miast</h2>
+            
+            <div class="city-selector">
+                <p>Kliknij na miasto, aby zobaczyć jak widget będzie wyglądał:</p>
+                <div class="city-buttons">
+                    <button class="city-btn active" onclick="loadCity('Warsaw')">Warszawa</button>
+                    <button class="city-btn" onclick="loadCity('Paris')">Paryż</button>
+                    <button class="city-btn" onclick="loadCity('London')">Londyn</button>
+                    <button class="city-btn" onclick="loadCity('New York')">Nowy Jork</button>
+                    <button class="city-btn" onclick="loadCity('Tokyo')">Tokio</button>
+                    <button class="city-btn" onclick="loadCity('Sydney')">Sydney</button>
+                    <button class="city-btn" onclick="loadCity('Dubai')">Dubaj</button>
+                    <button class="city-btn" onclick="loadCity('Barcelona')">Barcelona</button>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <h3 id="current-city">Warszawa - Przykład widget</h3>
+                <div class="url-example" id="current-url">
+                    weather-widget.html?city=Warsaw
+                </div>
+                <iframe id="weather-iframe" class="widget-frame" src="weather-widget.html?city=Warsaw"></iframe>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">🔧 Konfiguracja dla Notion</h2>
+            
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <h3>1. Struktura bazy danych</h3>
+                    <p>Dodaj te pola do bazy "Trip Itinerary":</p>
+                    <div class="code-block">
+• Location (Text) - nazwa miasta
+• Weather Widget (URL) - link do widget
+• Trip Dates (Date) - daty podróży
+• Trip Type (Select) - typ podróży
+                    </div>
+                </div>
+                
+                <div class="demo-item">
+                    <h3>2. Formuła Notion</h3>
+                    <p>Użyj tej formuły w polu "Weather Widget":</p>
+                    <div class="code-block">
+if(prop("Location") != "", 
+   "https://twoja-domena.com/weather-widget.html?city=" + prop("Location"),
+   "Ustaw lokalizację"
+)
+                    </div>
+                </div>
+                
+                <div class="demo-item">
+                    <h3>3. Szablon strony</h3>
+                    <p>Dodaj blok Embed z tym URL:</p>
+                    <div class="code-block">
+{{Weather Widget}}
+                    </div>
+                    <p>Notion automatycznie użyje wartości z formuły.</p>
+                </div>
+                
+                <div class="demo-item">
+                    <h3>4. Przycisk automatyzacji</h3>
+                    <p>Stwórz przycisk, który:</p>
+                    <div class="code-block">
+• Tworzy nową stronę podróży
+• Ustawia lokalizację
+• Dodaje widget pogodowy
+• Wypełnia podstawowe informacje
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">📱 Responsywność i personalizacja</h2>
+            
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <h3>Responsywny design</h3>
+                    <p>Widget automatycznie dostosowuje się do różnych rozmiarów ekranu i wygląda świetnie zarówno na desktop jak i mobile.</p>
+                </div>
+                
+                <div class="demo-item">
+                    <h3>Personalizacja kolorów</h3>
+                    <p>Możesz łatwo zmienić kolory widget modyfikując CSS:</p>
+                    <div class="code-block">
+/* Gradient tła */
+background: linear-gradient(135deg, #your-color1, #your-color2);
+                    </div>
+                </div>
+                
+                <div class="demo-item">
+                    <h3>Różne języki</h3>
+                    <p>Widget obsługuje wiele języków. Zmień parametr <code>lang</code> w API call:</p>
+                    <div class="code-block">
+&lang=pl  // Polski
+&lang=en  // Angielski
+&lang=fr  // Francuski
+&lang=de  // Niemiecki
+                    </div>
+                </div>
+                
+                <div class="demo-item">
+                    <h3>Cache i wydajność</h3>
+                    <p>Widget używa inteligentnego cache'owania, aby minimalizować liczbę zapytań do API i zapewnić szybkie ładowanie.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2 class="demo-title">🎯 Następne kroki</h2>
+            
+            <div class="instructions">
+                <h3>Gotowy do implementacji?</h3>
+                <ol>
+                    <li class="step">Pobierz pliki: <code>weather-widget.html</code>, <code>weather-config.js</code></li>
+                    <li class="step">Przeczytaj dokładnie <code>README-weather-widget.md</code></li>
+                    <li class="step">Zarejestruj się na OpenWeatherMap i pobierz klucz API</li>
+                    <li class="step">Wybierz hosting (polecamy GitHub Pages dla prostoty)</li>
+                    <li class="step">Skonfiguruj bazę danych w Notion</li>
+                    <li class="step">Przetestuj widget z różnymi miastami</li>
+                    <li class="step">Dodaj do swoich szablonów podróży!</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function loadCity(city) {
+            // Aktualizuj aktywny przycisk
+            document.querySelectorAll('.city-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Aktualizuj tytuł i URL
+            document.getElementById('current-city').textContent = `${city} - Przykład widget`;
+            document.getElementById('current-url').textContent = `weather-widget.html?city=${city}`;
+            
+            // Załaduj nowy widget
+            const iframe = document.getElementById('weather-iframe');
+            iframe.src = `weather-widget.html?city=${encodeURIComponent(city)}`;
+        }
+        
+        // Informacja o kluczu API
+        window.addEventListener('load', function() {
+            const hasApiKey = !document.querySelector('iframe').contentWindow.location.search.includes('YOUR_API_KEY_HERE');
+            
+            if (!hasApiKey) {
+                const warning = document.createElement('div');
+                warning.className = 'highlight';
+                warning.innerHTML = `
+                    <strong>⚠️ Uwaga:</strong> Widget wymaga klucza API z OpenWeatherMap. 
+                    Bez klucza zobaczysz tylko interfejs bez rzeczywistych danych pogodowych.
+                    <br><br>
+                    <a href="https://openweathermap.org/api" target="_blank">Pobierz darmowy klucz API tutaj →</a>
+                `;
+                document.querySelector('.demo-section').appendChild(warning);
+            }
+        });
+    </script>
+</body>
+</html>

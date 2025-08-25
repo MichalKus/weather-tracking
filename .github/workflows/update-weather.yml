@@ -1,0 +1,157 @@
+name: 🌤️ Update Weather Data
+
+on:
+  schedule:
+    # Aktualizuj co godzinę (0 minut każdej godziny)
+    - cron: '0 * * * *'
+  workflow_dispatch: # Pozwala na ręczne uruchomienie
+    inputs:
+      test_city:
+        description: 'Test specific city (optional)'
+        required: false
+        default: ''
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'update-weather.js'
+      - '.github/workflows/update-weather.yml'
+
+jobs:
+  update-weather:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: |
+        npm init -y
+        npm install node-fetch@2
+        
+    - name: 🧪 Test API connection (if test city provided)
+      if: github.event.inputs.test_city != ''
+      env:
+        OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+      run: |
+        echo "Testing weather API with city: ${{ github.event.inputs.test_city }}"
+        node update-weather.js test "${{ github.event.inputs.test_city }}"
+        
+    - name: 🌤️ Update weather data
+      if: github.event.inputs.test_city == ''
+      env:
+        OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+      run: |
+        echo "Starting weather data update..."
+        node update-weather.js
+        
+    - name: 📊 Check data file
+      run: |
+        if [ -f "data/weather.json" ]; then
+          echo "✅ Weather data file created successfully"
+          echo "📏 File size: $(du -h data/weather.json | cut -f1)"
+          echo "📈 Number of cities: $(jq '._metadata.totalCities // 0' data/weather.json)"
+          echo "🕐 Last update: $(jq -r '._metadata.lastUpdate // "unknown"' data/weather.json)"
+        else
+          echo "❌ Weather data file not found!"
+          exit 1
+        fi
+        
+    - name: 🔍 Validate JSON structure
+      run: |
+        echo "Validating JSON structure..."
+        if jq empty data/weather.json; then
+          echo "✅ JSON is valid"
+        else
+          echo "❌ Invalid JSON structure"
+          exit 1
+        fi
+        
+        # Check if we have at least some cities
+        CITY_COUNT=$(jq '._metadata.totalCities // 0' data/weather.json)
+        if [ "$CITY_COUNT" -gt 0 ]; then
+          echo "✅ Found $CITY_COUNT cities in cache"
+        else
+          echo "⚠️ Warning: No cities found in cache"
+        fi
+        
+    - name: 📝 Generate summary
+      run: |
+        echo "## 🌤️ Weather Update Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Update Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "**Total Cities:** $(jq '._metadata.totalCities // 0' data/weather.json)" >> $GITHUB_STEP_SUMMARY
+        echo "**Successful Updates:** $(jq '._metadata.successfulUpdates // 0' data/weather.json)" >> $GITHUB_STEP_SUMMARY
+        echo "**Failed Updates:** $(jq '._metadata.failedUpdates // 0' data/weather.json)" >> $GITHUB_STEP_SUMMARY
+        echo "**File Size:** $(du -h data/weather.json | cut -f1)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Available Cities:" >> $GITHUB_STEP_SUMMARY
+        jq -r '._metadata.availableCities[]?' data/weather.json | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY
+        
+    - name: 🚀 Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action 🤖"
+        
+        # Sprawdź czy są zmiany
+        if git diff --quiet data/weather.json; then
+          echo "📝 No changes in weather data"
+        else
+          echo "📝 Weather data updated, committing changes..."
+          git add data/weather.json
+          
+          # Utwórz commit message z informacjami o aktualizacji
+          SUCCESSFUL=$(jq '._metadata.successfulUpdates // 0' data/weather.json)
+          FAILED=$(jq '._metadata.failedUpdates // 0' data/weather.json)
+          TOTAL=$(jq '._metadata.totalCities // 0' data/weather.json)
+          
+          git commit -m "🌤️ Update weather data ($(date '+%Y-%m-%d %H:%M'))" \
+                     -m "" \
+                     -m "📊 Cities updated: $SUCCESSFUL" \
+                     -m "❌ Failed updates: $FAILED" \
+                     -m "📈 Total cities: $TOTAL" \
+                     -m "" \
+                     -m "🤖 Automated update by GitHub Actions"
+          
+          git push
+          echo "✅ Changes pushed successfully"
+        fi
+        
+  # Job do sprawdzania statusu GitHub Pages
+  check-pages:
+    needs: update-weather
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: 🌐 Check GitHub Pages status
+      run: |
+        echo "🔍 Checking GitHub Pages deployment..."
+        
+        # Pobierz informacje o repozytorium
+        REPO_OWNER="${{ github.repository_owner }}"
+        REPO_NAME="${{ github.event.repository.name }}"
+        
+        echo "📍 Repository: $REPO_OWNER/$REPO_NAME"
+        echo "🌐 Expected Pages URL: https://$REPO_OWNER.github.io/$REPO_NAME/"
+        echo "🌤️ Weather Widget URL: https://$REPO_OWNER.github.io/$REPO_NAME/weather-widget.html?city=Warsaw"
+        
+        # Dodaj do summary
+        echo "## 🌐 GitHub Pages Info" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Pages URL:** https://$REPO_OWNER.github.io/$REPO_NAME/" >> $GITHUB_STEP_SUMMARY
+        echo "**Weather Widget:** https://$REPO_OWNER.github.io/$REPO_NAME/weather-widget.html?city=Warsaw" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Test URLs:" >> $GITHUB_STEP_SUMMARY
+        echo "- [Warsaw](https://$REPO_OWNER.github.io/$REPO_NAME/weather-widget.html?city=Warsaw)" >> $GITHUB_STEP_SUMMARY
+        echo "- [Paris](https://$REPO_OWNER.github.io/$REPO_NAME/weather-widget.html?city=Paris)" >> $GITHUB_STEP_SUMMARY
+        echo "- [London](https://$REPO_OWNER.github.io/$REPO_NAME/weather-widget.html?city=London)" >> $GITHUB_STEP_SUMMARY
+        echo "- [New York](https://$REPO_OWNER.github.io/$REPO_NAME/weather-widget.html?city=New%20York)" >> $GITHUB_STEP_SUMMARY

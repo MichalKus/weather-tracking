@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Widget for Notion - GitHub Pages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .demo-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+        
+        .demo-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .demo-card .city-flag {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .copy-btn:hover {
+            background: #2d3748;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        .widget-preview {
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .widget-preview iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🌤️ Weather Widget for Notion</h1>
+            <p>Dynamiczny widget pogodowy dla szablonów Notion z GitHub Pages</p>
+        </header>
+        
+        <main class="main-content">
+            <section class="section">
+                <h2>🚀 Status projektu</h2>
+                <div>
+                    <span class="status-badge status-success" id="dataStatus">⏳ Sprawdzanie danych...</span>
+                    <span class="status-badge status-info" id="updateStatus">🔄 Sprawdzanie aktualizacji...</span>
+                    <span class="status-badge status-warning">🧪 Wersja Beta</span>
+                </div>
+                <p style="margin-top: 15px;">Widget automatycznie pobiera dane pogodowe co godzinę i cache'uje je dla szybkiego dostępu.</p>
+            </section>
+            
+            <section class="section">
+                <h2>✨ Funkcje</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">🔒</div>
+                        <div>
+                            <strong>Bezpieczny API Key</strong><br>
+                            <small>Klucz API przechowywany w GitHub Secrets</small>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div>
+                            <strong>Szybkie ładowanie</strong><br>
+                            <small>Dane cache'owane lokalnie</small>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔄</div>
+                        <div>
+                            <strong>Auto-aktualizacja</strong><br>
+                            <small>Dane odświeżane co godzinę</small>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🌍</div>
+                        <div>
+                            <strong>Wiele miast</strong><br>
+                            <small>Ponad 30 popularnych lokalizacji</small>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <div>
+                            <strong>Responsywny</strong><br>
+                            <small>Działa na wszystkich urządzeniach</small>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎨</div>
+                        <div>
+                            <strong>Piękny design</strong><br>
+                            <small>Nowoczesny interfejs z animacjami</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>🌍 Demo - Popularne miasta</h2>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <div class="city-flag">🇵🇱</div>
+                        <h3>Warszawa</h3>
+                        <a href="./weather-widget.html?city=Warsaw" class="btn" target="_blank">Zobacz pogodę</a>
+                    </div>
+                    <div class="demo-card">
+                        <div class="city-flag">🇫🇷</div>
+                        <h3>Paryż</h3>
+                        <a href="./weather-widget.html?city=Paris" class="btn" target="_blank">Zobacz pogodę</a>
+                    </div>
+                    <div class="demo-card">
+                        <div class="city-flag">🇬🇧</div>
+                        <h3>Londyn</h3>
+                        <a href="./weather-widget.html?city=London" class="btn" target="_blank">Zobacz pogodę</a>
+                    </div>
+                    <div class="demo-card">
+                        <div class="city-flag">🇺🇸</div>
+                        <h3>Nowy Jork</h3>
+                        <a href="./weather-widget.html?city=New York" class="btn" target="_blank">Zobacz pogodę</a>
+                    </div>
+                    <div class="demo-card">
+                        <div class="city-flag">🇯🇵</div>
+                        <h3>Tokio</h3>
+                        <a href="./weather-widget.html?city=Tokyo" class="btn" target="_blank">Zobacz pogodę</a>
+                    </div>
+                    <div class="demo-card">
+                        <div class="city-flag">🇵🇱</div>
+                        <h3>Kraków</h3>
+                        <a href="./weather-widget.html?city=Krakow" class="btn" target="_blank">Zobacz pogodę</a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>🔗 Integracja z Notion</h2>
+                <p>Aby użyć widget w swoim szablonie Notion:</p>
+                
+                <h3>1. Dodaj pole do bazy danych</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Kopiuj</button>
+Nazwa pola: Location (Text)
+Nazwa pola: Weather Widget (URL)
+                </div>
+                
+                <h3>2. Użyj formuły Notion</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Kopiuj</button>
+if(prop("Location") != "", 
+   "https://TWOJA-NAZWA.github.io/NAZWA-REPO/weather-widget.html?city=" + prop("Location"),
+   "Ustaw lokalizację"
+)
+                </div>
+                
+                <h3>3. Osadź widget</h3>
+                <p>W szablonie strony dodaj blok <strong>Embed</strong> z URL z pola "Weather Widget".</p>
+                
+                <div class="widget-preview">
+                    <iframe src="./weather-widget.html?city=Warsaw" title="Weather Widget Preview"></iframe>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>⚙️ Konfiguracja</h2>
+                <p>Aby skonfigurować własną instancję:</p>
+                
+                <ol style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>Fork tego repozytorium</strong> na GitHub</li>
+                    <li><strong>Pobierz klucz API</strong> z <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a></li>
+                    <li><strong>Dodaj Secret</strong> w ustawieniach repozytorium: <code>OPENWEATHER_API_KEY</code></li>
+                    <li><strong>Włącz GitHub Pages</strong> w ustawieniach repozytorium</li>
+                    <li><strong>Uruchom workflow</strong> "Update Weather Data" ręcznie</li>
+                </ol>
+                
+                <a href="https://github.com/YOUR-USERNAME/notion-weather-widget" class="btn" target="_blank">📖 Pełna dokumentacja</a>
+                <a href="https://github.com/YOUR-USERNAME/notion-weather-widget/fork" class="btn btn-secondary" target="_blank">🍴 Fork na GitHub</a>
+            </section>
+            
+            <section class="section">
+                <h2>📊 Dostępne miasta</h2>
+                <p>Widget obsługuje następujące miasta (lista aktualizowana automatycznie):</p>
+                <div id="cityList" style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    ⏳ Ładowanie listy miast...
+                </div>
+            </section>
+        </main>
+        
+        <footer class="footer">
+            <p>🌤️ Weather Widget for Notion | Powered by GitHub Pages & OpenWeatherMap</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Ostatnia aktualizacja: <span id="lastUpdate">⏳ Sprawdzanie...</span></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Funkcja do kopiowania kodu
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement;
+            const code = codeBlock.textContent.replace('Kopiuj', '').trim();
+            
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = '✅ Skopiowano!';
+                setTimeout(() => {
+                    button.textContent = 'Kopiuj';
+                }, 2000);
+            }).catch(() => {
+                button.textContent = '❌ Błąd';
+                setTimeout(() => {
+                    button.textContent = 'Kopiuj';
+                }, 2000);
+            });
+        }
+        
+        // Sprawdź status danych pogodowych
+        async function checkWeatherData() {
+            try {
+                const response = await fetch('./data/weather.json?t=' + Date.now());
+                const data = await response.json();
+                
+                if (data._metadata) {
+                    const metadata = data._metadata;
+                    
+                    // Aktualizuj status
+                    document.getElementById('dataStatus').textContent = `✅ ${metadata.totalCities} miast dostępnych`;
+                    document.getElementById('dataStatus').className = 'status-badge status-success';
+                    
+                    document.getElementById('updateStatus').textContent = `🕐 ${new Date(metadata.lastUpdate).toLocaleString('pl-PL')}`;
+                    document.getElementById('updateStatus').className = 'status-badge status-info';
+                    
+                    document.getElementById('lastUpdate').textContent = new Date(metadata.lastUpdate).toLocaleString('pl-PL');
+                    
+                    // Wyświetl listę miast
+                    if (metadata.availableCities) {
+                        const cityList = document.getElementById('cityList');
+                        const cities = metadata.availableCities.map(city => 
+                            `<a href="./weather-widget.html?city=${encodeURIComponent(city)}" target="_blank" style="display: inline-block; margin: 5px; padding: 8px 12px; background: #667eea; color: white; text-decoration: none; border-radius: 15px; font-size: 14px;">${city}</a>`
+                        ).join('');
+                        
+                        cityList.innerHTML = `
+                            <p style="margin-bottom: 15px;"><strong>Kliknij na miasto, aby zobaczyć pogodę:</strong></p>
+                            ${cities}
+                        `;
+                    }
+                } else {
+                    throw new Error('Brak metadanych');
+                }
+            } catch (error) {
+                console.error('Error checking weather data:', error);
+                document.getElementById('dataStatus').textContent = '❌ Brak danych';
+                document.getElementById('dataStatus').className = 'status-badge status-warning';
+                
+                document.getElementById('updateStatus').textContent = '⚠️ Sprawdź konfigurację';
+                document.getElementById('updateStatus').className = 'status-badge status-warning';
+                
+                document.getElementById('cityList').innerHTML = `
+                    <p style="color: #856404;">⚠️ Nie można załadować listy miast. Sprawdź czy GitHub Actions działa poprawnie.</p>
+                `;
+            }
+        }
+        
+        // Sprawdź dane po załadowaniu strony
+        document.addEventListener('DOMContentLoaded', checkWeatherData);
+        
+        // Odświeżaj status co 5 minut
+        setInterval(checkWeatherData, 5 * 60 * 1000);
+        
+        console.log('🌤️ Weather Widget for Notion - GitHub Pages Dashboard');
+    </script>
+</body>
+</html>
