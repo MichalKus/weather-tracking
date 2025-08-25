@@ -2,8 +2,8 @@ name: 🌤️ Update Weather Data
 
 on:
   schedule:
-    # Aktualizuj co godzinę (0 minut każdej godziny)
-    - cron: '0 * * * *'
+    # Aktualizuj co 12 godzin (o 6:00 i 18:00 UTC)
+    - cron: '0 6,18 * * *'
   workflow_dispatch: # Pozwala na ręczne uruchomienie
     inputs:
       test_city:
@@ -19,6 +19,8 @@ on:
 jobs:
   update-weather:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: 🔄 Checkout repository
@@ -103,7 +105,23 @@ jobs:
           echo "📝 No changes in weather data"
         else
           echo "📝 Weather data updated, committing changes..."
-          git add data/weather.json
+          
+          # Sprawdź czy istnieje poprzedni commit z weather data
+          WEATHER_COMMIT=$(git log --oneline --grep="🌤️ Update weather data" -n 1 --format="%H" || echo "")
+          
+          if [ ! -z "$WEATHER_COMMIT" ]; then
+            echo "🔄 Found previous weather commit: $WEATHER_COMMIT"
+            echo "🗑️ Removing previous weather commit to keep history clean..."
+            
+            # Soft reset do commita przed weather update
+            git reset --soft $WEATHER_COMMIT~1
+            
+            # Dodaj nowe zmiany
+            git add data/weather.json
+          else
+            echo "📝 First weather commit, adding normally..."
+            git add data/weather.json
+          fi
           
           # Utwórz commit message z informacjami o aktualizacji
           SUCCESSFUL=$(jq '._metadata.successfulUpdates // 0' data/weather.json)
@@ -118,8 +136,9 @@ jobs:
                      -m "" \
                      -m "🤖 Automated update by GitHub Actions"
           
-          git push
-          echo "✅ Changes pushed successfully"
+          # Force push aby zastąpić poprzedni commit
+          git push --force-with-lease
+          echo "✅ Changes pushed successfully (previous weather commits squashed)"
         fi
         
   # Job do sprawdzania statusu GitHub Pages
