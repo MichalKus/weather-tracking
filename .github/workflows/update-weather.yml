@@ -9,7 +9,7 @@ on:
       test_city:
         description: 'Test specific city (optional)'
         required: false
-        default: ''
+        default: 'Gdansk'
   push:
     branches: [ main, master ]
     paths:
@@ -33,9 +33,7 @@ jobs:
         cache: 'npm'
         
     - name: 📦 Install dependencies
-      run: |
-        npm init -y
-        npm install node-fetch@2
+      run: npm ci
         
     - name: 🧪 Test API connection (if test city provided)
       if: github.event.inputs.test_city != ''

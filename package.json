@@ -1,0 +1,21 @@
+{
+  "name": "weather-tracking",
+  "version": "1.0.0",
+  "description": "Dynamic weather widget for Notion",
+  "main": "update-weather.js",
+  "scripts": {
+    "start": "node update-weather.js",
+    "test": "node update-weather.js test"
+  },
+  "keywords": [
+    "weather",
+    "notion",
+    "widget",
+    "github-actions"
+  ],
+  "author": "Michal Kus",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
